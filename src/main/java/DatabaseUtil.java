@@ -5,10 +5,10 @@ public class DatabaseUtil {
     static final String URL = buildDatabaseUrl();
     static final String USER = System.getenv("PGUSER") != null ? 
         System.getenv("PGUSER") : 
-        "postgres";
+        System.getenv("DB_USER") != null ? System.getenv("DB_USER") : "postgres";
     static final String PASS = System.getenv("PGPASSWORD") != null ? 
         System.getenv("PGPASSWORD") : 
-        "Revanth2005";
+        System.getenv("DB_PASSWORD") != null ? System.getenv("DB_PASSWORD") : "Revanth2005";
     
     private static String buildDatabaseUrl() {
         // First try to use DATABASE_URL (Railway's standard variable)
@@ -30,6 +30,17 @@ public class DatabaseUtil {
             // Railway deployment - construct JDBC URL from Railway variables
             return String.format("jdbc:postgresql://%s:%s/%s", pgHost, pgPort, pgDatabase);
         } else {
+            // Check for generic database environment variables
+            String dbHost = System.getenv("DB_HOST");
+            String dbPort = System.getenv("DB_PORT");
+            String dbName = System.getenv("DB_NAME");
+            
+            if (dbHost != null) {
+                String port = dbPort != null ? dbPort : "5432";
+                String database = dbName != null ? dbName : "UserLoginSystem";
+                return String.format("jdbc:postgresql://%s:%s/%s", dbHost, port, database);
+            }
+            
             // Local development fallback
             return "jdbc:postgresql://localhost:5433/UserLoginSystem";
         }

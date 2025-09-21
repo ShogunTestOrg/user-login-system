@@ -6,6 +6,8 @@
   },
   "deploy": {
     "restartPolicyType": "ON_FAILURE",
-    "startCommand": "catalina.sh run"
+    "startCommand": "catalina.sh run",
+    "healthcheckPath": "/",
+    "healthcheckTimeout": 300
   }
 }
