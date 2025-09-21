@@ -1,0 +1,30 @@
+# Ignore target directory except for built artifacts
+target/
+!target/*.war
+
+# Ignore IDE files
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+
+# Ignore git
+.git/
+.gitignore
+
+# Ignore Maven wrapper
+.mvn/
+mvnw
+mvnw.cmd
+
+# Ignore logs
+*.log
+
+# Ignore temporary files
+*.tmp
+*.temp
