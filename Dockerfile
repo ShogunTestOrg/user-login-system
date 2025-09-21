@@ -1,5 +1,5 @@
 # Use OpenJDK 17 with Maven for building
-FROM maven:3.9-openjdk-17 AS build
+FROM maven:3.9.4-openjdk-17-slim AS build
 
 # Set working directory
 WORKDIR /app
@@ -12,7 +12,7 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # Use Tomcat for runtime
-FROM tomcat:9.0-jdk17
+FROM tomcat:9.0.80-jdk17-openjdk-slim
 
 # Remove default webapps
 RUN rm -rf /usr/local/tomcat/webapps/*
