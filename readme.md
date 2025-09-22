@@ -82,7 +82,7 @@ The application is configured to connect to:
 - **Port**: `5433` (local) / `5432` (remote)
 - **Database**: `UserLoginSystem`
 - **Username**: `postgres`
-- **Password**: `Revanth2005`
+- **Password**: `YourDBPassword`
 
 If your PostgreSQL setup is different, you can either:
 1. Update the credentials in `src/main/java/DatabaseUtil.java`
