@@ -1,47 +1,20 @@
 import java.sql.*;
 
 public class DatabaseUtil {
-    // Use environment variables for Railway deployment
+    // Database connection configuration
     static final String URL = buildDatabaseUrl();
-    static final String USER = System.getenv("PGUSER") != null ? 
-        System.getenv("PGUSER") : 
-        System.getenv("DB_USER") != null ? System.getenv("DB_USER") : "postgres";
-    static final String PASS = System.getenv("PGPASSWORD") != null ? 
-        System.getenv("PGPASSWORD") : 
-        System.getenv("DB_PASSWORD") != null ? System.getenv("DB_PASSWORD") : "Revanth2005";
+    static final String USER = "postgres";
+    static final String PASS = "Revanth2005";
     
     private static String buildDatabaseUrl() {
-        // First try to use DATABASE_URL (Railway's standard variable)
-        String databaseUrl = System.getenv("DATABASE_URL");
-        if (databaseUrl != null) {
-            // Railway provides DATABASE_URL in postgres:// format, convert to jdbc:postgresql://
-            if (databaseUrl.startsWith("postgres://")) {
-                databaseUrl = databaseUrl.replace("postgres://", "jdbc:postgresql://");
-            }
-            return databaseUrl;
-        }
+        // Check if remote database host is specified
+        String dbHost = System.getenv("DB_HOST");
         
-        // Fallback: Check if Railway environment variables are available
-        String pgHost = System.getenv("PGHOST");
-        String pgPort = System.getenv("PGPORT");
-        String pgDatabase = System.getenv("PGDATABASE");
-        
-        if (pgHost != null && pgPort != null && pgDatabase != null) {
-            // Railway deployment - construct JDBC URL from Railway variables
-            return String.format("jdbc:postgresql://%s:%s/%s", pgHost, pgPort, pgDatabase);
+        if (dbHost != null) {
+            // Remote database connection - use standard PostgreSQL port and default database name
+            return String.format("jdbc:postgresql://%s:5433/UserLoginSystem", dbHost);
         } else {
-            // Check for generic database environment variables
-            String dbHost = System.getenv("DB_HOST");
-            String dbPort = System.getenv("DB_PORT");
-            String dbName = System.getenv("DB_NAME");
-            
-            if (dbHost != null) {
-                String port = dbPort != null ? dbPort : "5432";
-                String database = dbName != null ? dbName : "UserLoginSystem";
-                return String.format("jdbc:postgresql://%s:%s/%s", dbHost, port, database);
-            }
-            
-            // Local development fallback
+            // Local database connection
             return "jdbc:postgresql://localhost:5433/UserLoginSystem";
         }
     }
@@ -59,11 +32,6 @@ public class DatabaseUtil {
         System.out.println("Attempting database connection with:");
         System.out.println("URL: " + URL);
         System.out.println("USER: " + USER);
-        System.out.println("Environment variables:");
-        System.out.println("PGHOST: " + System.getenv("PGHOST"));
-        System.out.println("PGPORT: " + System.getenv("PGPORT"));
-        System.out.println("PGDATABASE: " + System.getenv("PGDATABASE"));
-        System.out.println("PGUSER: " + System.getenv("PGUSER"));
         
         Connection conn = DriverManager.getConnection(URL, USER, PASS);
         System.out.println("Database connection successful!");
